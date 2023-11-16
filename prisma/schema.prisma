@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  email    String @unique
+  password String
+  name     String @unique
+  image    String @default("/uploads/default_avatar.png")
+
+  login   String  @unique
+  gender  String?
+  country String
+
+  premiumId Int?         @map("premium_id")
+  premium   UserPremium? @relation(fields: [premiumId], references: [id])
+  role      UserRole     @default(USER)
+  tracks    Track[]
+  playlist  Playlist[]
+}
+
+model UserPremium {
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+  name       String
+  users      User[]
+  expiration DateTime?
+  price      Decimal   @default(0) @db.Decimal(10, 2)
+}
+
+model Track {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  releaseDate DateTime
+  name        String
+  image       String
+  file        String
+
+  artistId Int  @map("artist_id")
+  artist   User @relation(fields: [artistId], references: [id])
+
+  albumId Int?   @map("album_id")
+  album   Album? @relation(fields: [albumId], references: [id])
+
+  playlists Playlist[]
+}
+
+model Album {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  releaseDate DateTime
+  name        String
+  image       String
+
+  tracks Track[]
+}
+
+model Playlist {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  name  String
+  slug  String @unique
+  image String
+
+  tracks Track[]
+
+  userId Int  @map("user_id")
+  user   User @relation(fields: [userId], references: [id])
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  MODERATOR
+  SUPPORT
+  DEVELOPER
+}
+
+// enum UserPremium {
+//   NONEPREMIUM
+//   INDIVIDUAL
+//   STUDENT
+//   DUO
+//   FAMILY
+// }
