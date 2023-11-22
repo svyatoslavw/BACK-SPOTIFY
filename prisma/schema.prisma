@@ -22,21 +22,23 @@ model User {
   gender  String?
   country String
 
-  premiumId Int?         @map("premium_id")
-  premium   UserPremium? @relation(fields: [premiumId], references: [id])
-  role      UserRole     @default(USER)
+  isPremium Boolean @default(false)
+
+  role      UserRole   @default(USER)
   tracks    Track[]
+  albums    Album[]
+  favorites Favorite[]
   playlist  Playlist[]
 }
 
-model UserPremium {
-  id         Int       @id @default(autoincrement())
-  createdAt  DateTime  @default(now()) @map("created_at")
-  updatedAt  DateTime  @updatedAt @map("updated_at")
-  name       String
-  users      User[]
-  expiration DateTime?
-  price      Decimal   @default(0) @db.Decimal(10, 2)
+model Favorite {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  userId     Int
+  playlistId Int
+  user       User     @relation(fields: [userId], references: [id])
+  playlist   Playlist @relation(fields: [playlistId], references: [id])
 }
 
 model Track {
@@ -56,18 +58,26 @@ model Track {
   album   Album? @relation(fields: [albumId], references: [id])
 
   playlists Playlist[]
+
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId Int?      @map("category_id")
 }
 
 model Album {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
   releaseDate DateTime
   name        String
   image       String
 
   tracks Track[]
+
+  artistId Int  @map("artist_id")
+  artist   User @relation(fields: [artistId], references: [id])
+
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId Int?      @map("category_id")
 }
 
 model Playlist {
@@ -79,10 +89,21 @@ model Playlist {
   slug  String @unique
   image String
 
-  tracks Track[]
+  userId    Int
+  user      User       @relation(fields: [userId], references: [id])
+  tracks    Track[]
+  favorites Favorite[]
+}
 
-  userId Int  @map("user_id")
-  user   User @relation(fields: [userId], references: [id])
+model Category {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  name   String  @unique
+  slug   String  @unique
+  tracks Track[]
+  albums Album[]
 }
 
 enum UserRole {

@@ -16,5 +16,7 @@ export const returnTrackObject: Prisma.TrackSelect = {
 		}
 	},
 	album: true,
-	albumId: true
+	albumId: true,
+	category: true,
+	categoryId: true
 }

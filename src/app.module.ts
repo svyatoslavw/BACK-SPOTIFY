@@ -10,6 +10,7 @@ import { PlaylistModule } from './playlist/playlist.module'
 import { PrismaService } from './prisma.service'
 import { TrackModule } from './track/track.module'
 import { UserModule } from './user/user.module'
+import { SearchModule } from './search/search.module';
 
 @Module({
 	imports: [
@@ -26,7 +27,8 @@ import { UserModule } from './user/user.module'
 		TrackModule,
 		AlbumModule,
 		PlaylistModule,
-		MediaModule
+		MediaModule,
+		SearchModule
 	],
 	controllers: [],
 	providers: [PrismaService]

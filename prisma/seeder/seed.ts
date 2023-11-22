@@ -6,37 +6,18 @@ dotenv.config()
 const prisma = new PrismaClient()
 
 const createPlaylist = async () => {
-	// const playlist = await prisma.playlist.create({
-	// 	data: {
-	// 		name: 'Template',
-	// 		image: '',
-	// 		slug: 'template',
-	// 		user: {
-	// 			connect: {
-	// 				id: 2
-	// 			}
-	// 		},
-	// 		tracks: {
-	// 			connect: {
-	// 				id: 6
-	// 			}
-	// 		}
-	// 	}
-	// })
-	// return playlist
-	const tracks = await prisma.playlist.update({
-		where: {
-			id: 2
-		},
+	const playlist = await prisma.playlist.create({
 		data: {
+			name: 'Template',
+			image: '',
+			slug: 'template',
 			tracks: {
-				connect: {
-					id: 10
-				}
-			}
+				connect: [{ id: 6 }, { id: 7 }, { id: 8 }, { id: 9 }, { id: 10 }]
+			},
+			userId: 2
 		}
 	})
-	return tracks
+	return playlist
 }
 
 const createTracks = async (quantity: number) => {
@@ -49,7 +30,7 @@ const createTracks = async (quantity: number) => {
 		const track = await prisma.track.create({
 			data: {
 				name: trackName,
-				image: '',
+				image: '/uploads/9.jpg',
 				file: '/uploads/test.mp3',
 				releaseDate: trackDate,
 				artist: {
@@ -61,13 +42,14 @@ const createTracks = async (quantity: number) => {
 		})
 		tracks.push(track)
 	}
-	console.log(`Created ${tracks.length} trakcs`)
+	console.log(`Created ${tracks.length} tracks`)
 }
 
 async function main() {
 	console.log('Start seeding...')
-	await createPlaylist()
-	//await createTracks(10)
+	await createTracks(12)
+	//await createPlaylist()
+	//await createPremium()
 }
 
 main()

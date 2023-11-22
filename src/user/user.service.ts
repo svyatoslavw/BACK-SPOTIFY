@@ -1,9 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import {
+	BadRequestException,
+	Injectable,
+	NotFoundException
+} from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { hash } from 'bcrypt'
+import { returnPlaylistObject } from 'src/playlist/playlist.object'
 import { PrismaService } from 'src/prisma.service'
 import { UserDto } from './dto/user.dto'
-import { returnUserObject } from './user.object'
 
 @Injectable()
 export class UserService {
@@ -14,7 +18,32 @@ export class UserService {
 			where: {
 				id
 			},
-			select: returnUserObject
+			select: {
+				id: true,
+				email: true,
+				name: true,
+				createdAt: true,
+				image: true,
+				login: true,
+				country: true,
+				gender: true,
+				role: true,
+				tracks: true,
+				isPremium: true,
+				favorites: {
+					select: {
+						id: true,
+						createdAt: true,
+						playlistId: true,
+						playlist: {
+							select: returnPlaylistObject
+						},
+						user: true,
+						userId: true
+					}
+				},
+				...selectObject
+			}
 		})
 
 		if (!user) throw new Error('User not found')
@@ -49,9 +78,56 @@ export class UserService {
 			data: {
 				email: dto.email,
 				name: dto.name,
+				image: dto.image,
 				password: dto.password ? await hash(dto.password, 10) : user.password
 			}
 		})
+	}
+
+	async toggleFavorite(userId: number, playlistId: number) {
+		const user = await this.prisma.user.findUnique({
+			where: { id: userId },
+			select: {
+				favorites: {
+					select: {
+						id: true,
+						playlist: {
+							select: returnPlaylistObject
+						},
+						createdAt: true,
+						user: true,
+						userId: true,
+						playlistId: true
+					}
+				}
+			}
+		})
+
+		if (!user) {
+			throw new NotFoundException('Пользователь не найден')
+		}
+
+		const isFavorite = user.favorites.some(
+			favorite => favorite.playlistId === playlistId
+		)
+
+		if (isFavorite) {
+			await this.prisma.favorite.deleteMany({
+				where: {
+					userId,
+					playlistId
+				}
+			})
+		} else {
+			await this.prisma.favorite.create({
+				data: {
+					userId,
+					playlistId
+				}
+			})
+		}
+
+		return 'Success'
 	}
 
 	remove(id: number) {

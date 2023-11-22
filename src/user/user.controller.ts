@@ -5,6 +5,7 @@ import {
 	Get,
 	HttpCode,
 	Param,
+	Patch,
 	Put,
 	UsePipes,
 	ValidationPipe
@@ -30,6 +31,17 @@ export class UserController {
 	@Put('profile')
 	async updateProfile(@CurrentUser('id') id: number, @Body() dto: UserDto) {
 		return this.userService.updateProfile(id, dto)
+	}
+
+	@Auth()
+	@UsePipes(new ValidationPipe())
+	@HttpCode(200)
+	@Patch('profile/favorites/:playlistId')
+	async toggleFavorite(
+		@Param('playlistId') playlistId: string,
+		@CurrentUser('id') id: number
+	) {
+		return this.userService.toggleFavorite(id, +playlistId)
 	}
 
 	@Delete(':id')

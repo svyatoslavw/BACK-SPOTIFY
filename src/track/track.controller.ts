@@ -17,6 +17,12 @@ export class TrackController {
 		return this.trackService.getAll()
 	}
 
+	@UsePipes(new ValidationPipe())
+	@Get('home')
+	async getFive() {
+		return this.trackService.getHome()
+	}
+
 	@Get(':id')
 	async ById(@Param('id') id: string) {
 		return this.trackService.byId(+id)
