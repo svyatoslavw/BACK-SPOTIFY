@@ -21,6 +21,7 @@ export class UserService {
 			select: {
 				id: true,
 				email: true,
+				password: false,
 				name: true,
 				createdAt: true,
 				image: true,
@@ -28,8 +29,12 @@ export class UserService {
 				country: true,
 				gender: true,
 				role: true,
-				tracks: true,
 				isPremium: true,
+				tracks: true,
+				playlist: {
+					select: returnPlaylistObject
+				},
+				albums: true,
 				favorites: {
 					select: {
 						id: true,
