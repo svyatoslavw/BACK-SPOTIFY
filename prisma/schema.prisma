@@ -18,17 +18,19 @@ model User {
   name     String @unique
   image    String @default("/uploads/default_avatar.png")
 
-  login   String  @unique
-  gender  String?
-  country String
-
-  isPremium Boolean @default(false)
-
+  login     String     @unique
+  gender    String?
+  country   String
+  //isPremium Boolean @default(false)
   role      UserRole   @default(USER)
   tracks    Track[]
   albums    Album[]
   favorites Favorite[]
   playlist  Playlist[]
+
+  premiumId Int?
+  premium   Premium? @relation(fields: [premiumId], references: [id])
+  Order     Order[]
 }
 
 model Favorite {
@@ -106,6 +108,48 @@ model Category {
   albums Album[]
 }
 
+model Premium {
+  id        Int             @id @default(autoincrement())
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+  price     Int
+  image     String          @default("/uploads/icon.png")
+  type      EnumUserPremium
+
+  users User[]
+  Order Order[]
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  price  Int
+  status EnumOrderStatus @default(PENDING)
+
+  itemId Int?     @map("product_id")
+  item   Premium? @relation(fields: [itemId], references: [id])
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @map("user_id")
+}
+
+enum EnumOrderStatus {
+  PENDING
+  PAYED
+  SHIPPED
+  DELIVERED
+}
+
+enum EnumUserPremium {
+  NONEPREMIUM
+  INDIVIDUAL
+  STUDENT
+  DUO
+  FAMILY
+}
+
 enum UserRole {
   USER
   ADMIN
@@ -113,11 +157,3 @@ enum UserRole {
   SUPPORT
   DEVELOPER
 }
-
-// enum UserPremium {
-//   NONEPREMIUM
-//   INDIVIDUAL
-//   STUDENT
-//   DUO
-//   FAMILY
-// }

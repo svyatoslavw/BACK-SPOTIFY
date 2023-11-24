@@ -31,6 +31,7 @@
 		"@nestjs/platform-express": "^10.0.0",
 		"@nestjs/serve-static": "^4.0.0",
 		"@prisma/client": "^5.5.2",
+		"@stripe/stripe-js": "^2.2.0",
 		"@types/bcrypt": "^5.0.1",
 		"@types/fs-extra": "^11.0.4",
 		"@types/multer": "^1.4.10",
@@ -54,6 +55,7 @@
 		"passport-jwt": "^4.0.1",
 		"reflect-metadata": "^0.1.13",
 		"rxjs": "^7.8.1",
+		"stripe": "^14.5.0",
 		"uuid": "^9.0.1"
 	},
 	"devDependencies": {

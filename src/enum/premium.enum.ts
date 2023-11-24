@@ -1,9 +1,9 @@
-// enum UserPremium {
-// 	USER = 'USER',
-// 	ADMIN = 'ADMIN',
-// 	MODERATOR = 'MODERATOR',
-// 	SUPPORT = 'SUPPORT',
-// 	DEVELOPER = 'DEVELOPER'
-// }
+enum UserPremium {
+	NONEPREMIUM = 'NONE PREMIUM',
+	INDIVIDUAL = 'INDIVIDUAL',
+	STUDENT = 'STUDENT',
+	DUO = 'DUO',
+	FAMILY = 'FAMILY'
+}
 
-// type UserPremiumType = keyof typeof UserPremium
+type UserPremiumType = keyof typeof UserPremium

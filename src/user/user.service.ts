@@ -29,7 +29,6 @@ export class UserService {
 				country: true,
 				gender: true,
 				role: true,
-				isPremium: true,
 				tracks: true,
 				playlist: {
 					select: returnPlaylistObject

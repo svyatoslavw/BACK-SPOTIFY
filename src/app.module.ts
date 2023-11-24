@@ -8,9 +8,11 @@ import { AuthModule } from './auth/auth.module'
 import { MediaModule } from './media/media.module'
 import { PlaylistModule } from './playlist/playlist.module'
 import { PrismaService } from './prisma.service'
+import { SearchModule } from './search/search.module'
+import { StatisticsModule } from './statistics/statistics.module'
 import { TrackModule } from './track/track.module'
 import { UserModule } from './user/user.module'
-import { SearchModule } from './search/search.module';
+import { PremiumModule } from './premium/premium.module';
 
 @Module({
 	imports: [
@@ -28,7 +30,9 @@ import { SearchModule } from './search/search.module';
 		AlbumModule,
 		PlaylistModule,
 		MediaModule,
-		SearchModule
+		SearchModule,
+		StatisticsModule,
+		PremiumModule
 	],
 	controllers: [],
 	providers: [PrismaService]
