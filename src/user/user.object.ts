@@ -10,6 +10,7 @@ export const returnUserObject: Prisma.UserSelect = {
 	country: true,
 	image: true,
 	role: true,
+	premium: true,
 	favorites: {
 		select: returnPlaylistObject
 	},

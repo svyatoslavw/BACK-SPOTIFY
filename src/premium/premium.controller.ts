@@ -1,9 +1,8 @@
 import {
-	Body,
 	Controller,
 	Get,
 	HttpCode,
-	Post,
+	Param,
 	Res,
 	UsePipes,
 	ValidationPipe
@@ -19,10 +18,10 @@ export class PremiumController {
 
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
-	@Auth('USER')
-	@Post('create')
+	@Auth()
+	@Get('create/:type')
 	async create(
-		@Body('type') type: UserPremiumType,
+		@Param('type') type: UserPremiumType,
 		@CurrentUser('id') id: number
 	) {
 		return this.premiumService.create(type, id)

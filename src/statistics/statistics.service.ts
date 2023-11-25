@@ -14,11 +14,12 @@ export class StatisticsService {
 		const tracksCount = await this.prisma.track.count()
 		const albumsCount = await this.prisma.album.count()
 		const playlistCount = await this.prisma.playlist.count()
-		// const totalAmount = await this.prisma.order.aggregate({
-		// 	_sum: {
-		// 		total: true
-		// 	}
-		// })
+		const premiumCount = await this.prisma.premium.count()
+		const totalAmount = await this.prisma.order.aggregate({
+			_sum: {
+				price: true
+			}
+		})
 
 		return [
 			{
@@ -36,11 +37,15 @@ export class StatisticsService {
 			{
 				name: 'Playlists',
 				value: playlistCount
+			},
+			{
+				name: 'Premiums',
+				value: premiumCount
+			},
+			{
+				name: 'Total amount',
+				value: totalAmount._sum.price
 			}
-			// {
-			// 	name: 'Total amount',
-			// 	value: totalAmount._sum.total
-			// }
 		]
 	}
 }

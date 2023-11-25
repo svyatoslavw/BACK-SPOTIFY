@@ -17,9 +17,11 @@ export class PremiumService {
 		})
 
 		let session: any
+		let price: number
 
 		switch (type) {
 			case 'INDIVIDUAL':
+				price = 4.99
 				session = await stripe.checkout.sessions.create({
 					line_items: [
 						{
@@ -30,11 +32,15 @@ export class PremiumService {
 					mode: 'subscription',
 					customer: 'cus_P49FTV4LMX5Z4z',
 					success_url: `http://localhost:4000/premium/success/session?success=true`,
-					cancel_url: `http://localhost:4000/premium/success/session?canceled=true`
+					cancel_url: `http://localhost:4000/premium/success/session?canceled=true`,
+					subscription_data: {
+						trial_period_days: 30
+					}
 				})
 				break
 
 			case 'DUO':
+				price = 6.49
 				session = await stripe.checkout.sessions.create({
 					line_items: [
 						{
@@ -45,11 +51,15 @@ export class PremiumService {
 					mode: 'subscription',
 					customer: 'cus_P49FTV4LMX5Z4z',
 					success_url: `http://localhost:4000/premium/success/session?success=true`,
-					cancel_url: `http://localhost:4000/premium/success/session?canceled=true`
+					cancel_url: `http://localhost:4000/premium/success/session?canceled=true`,
+					subscription_data: {
+						trial_period_days: 30
+					}
 				})
 				break
 
 			case 'STUDENT':
+				price = 2.49
 				session = await stripe.checkout.sessions.create({
 					line_items: [
 						{
@@ -60,10 +70,14 @@ export class PremiumService {
 					mode: 'subscription',
 					customer: 'cus_P49FTV4LMX5Z4z',
 					success_url: `http://localhost:4000/premium/success/session?success=true`,
-					cancel_url: `http://localhost:4000/premium/success/session?canceled=true`
+					cancel_url: `http://localhost:4000/premium/success/session?canceled=true`,
+					subscription_data: {
+						trial_period_days: 30
+					}
 				})
 				break
 			case 'FAMILY':
+				price = 7.99
 				session = await stripe.checkout.sessions.create({
 					line_items: [
 						{
@@ -74,14 +88,16 @@ export class PremiumService {
 					mode: 'subscription',
 					customer: 'cus_P49FTV4LMX5Z4z',
 					success_url: `http://localhost:4000/premium/success/session?success=true`,
-					cancel_url: `http://localhost:4000/premium/success/session?canceled=true`
+					cancel_url: `http://localhost:4000/premium/success/session?canceled=true`,
+					subscription_data: {
+						trial_period_days: 30
+					}
 				})
 				break
 
 			default:
-				throw new Error('Error')
+				throw new Error()
 		}
-
 		const premium = await this.prisma.premium.create({
 			data: {
 				type: type,
@@ -90,7 +106,7 @@ export class PremiumService {
 						id: userId
 					}
 				},
-				price: 10
+				price
 			}
 		})
 

@@ -109,12 +109,13 @@ model Category {
 }
 
 model Premium {
-  id        Int             @id @default(autoincrement())
-  createdAt DateTime        @default(now()) @map("created_at")
-  updatedAt DateTime        @updatedAt @map("updated_at")
-  price     Int
-  image     String          @default("/uploads/icon.png")
-  type      EnumUserPremium
+  id         Int             @id @default(autoincrement())
+  createdAt  DateTime        @default(now()) @map("created_at")
+  updatedAt  DateTime        @updatedAt @map("updated_at")
+  expiration DateTime?
+  price      Decimal         @default(0) @db.Decimal(10, 2)
+  image      String          @default("/uploads/icon.png")
+  type       EnumUserPremium
 
   users User[]
   Order Order[]
@@ -125,7 +126,7 @@ model Order {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  price  Int
+  price  Decimal         @default(0) @db.Decimal(10, 2)
   status EnumOrderStatus @default(PENDING)
 
   itemId Int?     @map("product_id")
