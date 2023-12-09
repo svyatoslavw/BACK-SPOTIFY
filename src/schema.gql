@@ -1,0 +1,143 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Playlist {
+  id: Int!
+  createdAt: String!
+  slug: String!
+  name: String!
+  image: String!
+  tracks: [Track!]!
+  userId: Float!
+  user: User!
+}
+
+type User {
+  id: Int!
+  createdAt: String!
+  email: String!
+  password: String!
+  name: String!
+  image: String!
+  country: String!
+  login: String!
+  favorites: [Playlist!]
+  role: UserRole!
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  MODERATOR
+  SUPPORT
+  DEVELOPER
+}
+
+type Track {
+  id: Int!
+  createdAt: String!
+  releaseDate: String!
+  file: String!
+  name: String!
+  image: String!
+  artistId: Int!
+  artist: User!
+  album: String!
+  albumId: [Album!]!
+  category: Category!
+  categoryId: Int!
+}
+
+type Category {
+  exampleField: Int!
+  createdAt: String!
+  name: String!
+  slug: String!
+  tracks: [Track!]!
+  albums: [Album!]!
+}
+
+type Album {
+  id: Int!
+  createdAt: String!
+  releaseDate: String!
+  name: String!
+  image: String!
+  tracks: [Track!]!
+  category: Category!
+  categoryId: Int!
+}
+
+type AuthResponse {
+  user: User!
+  accessToken: String!
+  refreshToken: String!
+}
+
+type StatisticsResponse {
+  name: String!
+  value: Float!
+}
+
+type Query {
+  getAllUsers: [User!]!
+  getProfile(id: Float!): User!
+  getAllTracks: [Track!]!
+  getHomeTracks: [Track!]!
+  getTrackById(id: String!): Track!
+  getAllAlbum: [Album!]!
+  getAllPlaylist: [Playlist!]!
+  getPlaylistById(id: String!): Playlist!
+  getPlaylistBySlug(slug: String!): Playlist!
+  getMainStatistics: [StatisticsResponse!]!
+  getAllCategory: [Category!]!
+  getCategoryById(id: Int!): Category!
+}
+
+type Mutation {
+  updateProfile(id: Float!, dto: UserDto!): User!
+  toggleFavorite(playlistId: String!, id: Float!): User!
+  deleteProfile(id: String!): User!
+  register(registerInput: AuthDto!): AuthResponse!
+  login(loginInput: AuthDto!): AuthResponse!
+  getTokens(authInput: TokensDto!): AuthResponse!
+  googleLogin: AuthResponse!
+  githubLogin: AuthResponse!
+  googleRedirect: AuthResponse!
+  githubRedirect: AuthResponse!
+  createPlaylist(id: Float!): Playlist!
+  deletePlaylist(id: String!, playlistId: String!): Playlist!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  deleteCategory(id: Int!): Category!
+}
+
+input UserDto {
+  email: String!
+  password: String!
+  name: String!
+  image: String!
+}
+
+input AuthDto {
+  email: String!
+  name: String
+  password: String!
+}
+
+input TokensDto {
+  accessToken: String!
+  refreshToken: String!
+}
+
+input CreateCategoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCategoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}

@@ -13,6 +13,10 @@ import { UserDto } from './dto/user.dto'
 export class UserService {
 	constructor(private prisma: PrismaService) {}
 
+	async getAll() {
+		return this.prisma.user.findMany()
+	}
+
 	async byId(id: number, selectObject: Prisma.UserSelect = {}) {
 		const user = await this.prisma.user.findUnique({
 			where: {

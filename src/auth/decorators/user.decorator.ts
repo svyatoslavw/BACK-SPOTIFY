@@ -1,15 +1,21 @@
-import { ExecutionContext, createParamDecorator } from '@nestjs/common'
-import { User } from '@prisma/client'
+// -------------------------
+// NOT WORKING WITH GRAPHQL!
+// -------------------------
 
-export const CurrentUser = createParamDecorator(
-	(data: keyof User, ctx: ExecutionContext) => {
-		const request = ctx.switchToHttp().getRequest()
-		const user = request.user
+// import { ExecutionContext, createParamDecorator } from '@nestjs/common'
+// import { GqlExecutionContext } from '@nestjs/graphql'
+// import { User } from '@prisma/client'
 
-		if (!user) {
-			throw new Error('User not authenticated or user data is missing')
-		}
+// export const CurrentUser = createParamDecorator(
+// 	(data: keyof User, context: ExecutionContext) => {
+// 		const ctx = GqlExecutionContext.create(context)
+// 		const request = ctx.getContext().req
+// 		const user = request.user
 
-		return data ? user[data] : user
-	}
-)
+// 		if (!user) {
+// 			throw new Error('User not authenticated or user data is missing')
+// 		}
+
+// 		return data ? user[data] : user
+// 	}
+// )

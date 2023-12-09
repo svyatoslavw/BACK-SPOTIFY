@@ -2,11 +2,14 @@ import {
 	BadRequestException,
 	Injectable,
 	NotFoundException,
+	Req,
+	Res,
 	UnauthorizedException
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { User } from '@prisma/client'
 import { hash, verify } from 'argon2'
+import { Request, Response } from 'express'
 import { PrismaService } from 'src/prisma.service'
 import { UserService } from 'src/user/user.service'
 import { generateRandomLogin } from 'src/utils/random-login'
@@ -38,7 +41,7 @@ export class AuthService {
 		return { user: this.returnUserFields(user), ...tokens }
 	}
 
-	async register(ip: string, dto: AuthDto) {
+	async register(dto: AuthDto) {
 		const oldUser = await this.prisma.user.findUnique({
 			where: {
 				email: dto.email
@@ -125,5 +128,20 @@ export class AuthService {
 		if (!isValid) throw new UnauthorizedException('Invalid password')
 
 		return user
+	}
+
+	async socialRedirect(@Req() req: Request, @Res() res: Response) {
+		const user = req.user
+		const accessToken = this.jwtServise.sign(user, {
+			expiresIn: '1d'
+		})
+
+		const refreshToken = this.jwtServise.sign(user, {
+			expiresIn: '7d'
+		})
+		res.cookie('accessToken', accessToken)
+		res.cookie('refreshToken', refreshToken)
+
+		res.redirect('http://localhost:3000')
 	}
 }

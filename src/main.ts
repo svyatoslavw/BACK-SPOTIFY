@@ -15,9 +15,15 @@ async function bootstrap() {
 	app.use(
 		cors({
 			origin: 'http://localhost:3000',
-			methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-			allowedHeaders:
-				'Content-Type, Authorization, Access-Control-Allow-Origin',
+			methods: 'GET,HEAD,PUT,PATCH,POST,DELETE, OPTIONS',
+			allowedHeaders: [
+				'Content-Type',
+				'Authorization',
+				'Access-Control-Allow-Origin',
+				'apollo-require-preflight',
+				'X-Requested-With',
+				'Accept'
+			],
 			credentials: true
 		})
 	)

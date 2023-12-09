@@ -5,7 +5,7 @@ import {
 	Injectable
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { User } from '@prisma/client'
+import { GqlExecutionContext } from '@nestjs/graphql'
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -21,11 +21,11 @@ export class RolesGuard implements CanActivate {
 			return true
 		}
 
-		const request = context.switchToHttp().getRequest<{ user: User }>()
-		const user = request.user
+		const gqlContext = GqlExecutionContext.create(context)
+		const { user } = gqlContext.getContext().req
 
 		if (!user || !roles.includes(user.role)) {
-			throw new ForbiddenException('Вы не админ')
+			throw new ForbiddenException(`Вы не ${user.role}`)
 		}
 
 		return true

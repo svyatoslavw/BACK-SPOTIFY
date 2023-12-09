@@ -7,9 +7,9 @@ import {
 	UsePipes,
 	ValidationPipe
 } from '@nestjs/common'
+import { Args } from '@nestjs/graphql'
 import { Response } from 'express'
 import { Auth } from 'src/auth/decorators/auth.decorator'
-import { CurrentUser } from 'src/auth/decorators/user.decorator'
 import { PremiumService } from './premium.service'
 
 @Controller('premium')
@@ -20,10 +20,7 @@ export class PremiumController {
 	@HttpCode(200)
 	@Auth()
 	@Get('create/:type')
-	async create(
-		@Param('type') type: UserPremiumType,
-		@CurrentUser('id') id: number
-	) {
+	async create(@Param('type') type: UserPremiumType, @Args('id') id: number) {
 		return this.premiumService.create(type, id)
 	}
 

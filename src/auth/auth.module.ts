@@ -6,7 +6,7 @@ import { getJwtConfig } from 'src/config/jwt.config'
 import { PrismaService } from 'src/prisma.service'
 import { UserModule } from 'src/user/user.module'
 import { UserService } from 'src/user/user.service'
-import { AuthController } from './auth.controller'
+import { AuthResolver } from './auth.resolver'
 import { AuthService } from './auth.service'
 import { SessionSerializer } from './serializers/session.serialize'
 import { GithubStrategy } from './strategy/github.strategy'
@@ -24,9 +24,9 @@ import { JwtStrategy } from './strategy/jwt.strategy'
 		UserModule,
 		CacheModule.register()
 	],
-	controllers: [AuthController],
 	providers: [
 		AuthService,
+		AuthResolver,
 		UserService,
 		PrismaService,
 		JwtStrategy,
