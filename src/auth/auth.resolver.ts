@@ -1,13 +1,11 @@
-import { UseGuards } from '@nestjs/common'
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql'
-import { Request, Response } from 'express'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { AuthService } from './auth.service'
 import { AuthResponse } from './auth.types'
 import { AuthDto } from './dto/auth.dto'
 import { TokensDto } from './dto/tokens.dto'
 import { Auth } from './entities/auth.entity'
-import { GithubGuard } from './guards/github.guard'
-import { GoogleGuard } from './guards/google.guard'
+//import { GithubGuard } from './guards/github.guard'
+//import { GoogleGuard } from './guards/google.guard'
 
 @Resolver(() => Auth)
 export class AuthResolver {
@@ -28,27 +26,28 @@ export class AuthResolver {
 		return this.authService.getNewTokens(dto.refreshToken)
 	}
 
-	@UseGuards(GoogleGuard)
-	@Mutation(() => AuthResponse)
-	googleLogin(@Context('req') req: Request, @Context('res') res: Response) {
-		return { message: 'Google Authorization' }
-	}
+	//@UseGuards(GoogleGuard)
+	// @Query(() => AuthResponse)
+	// googleLogin(@Context() context: any) {
+	// 	const { user } = context.req
+	// 	console.log(user)
+	// }
 
-	@UseGuards(GithubGuard)
-	@Mutation(() => AuthResponse)
-	githubLogin(@Context('req') req: Request, @Context('res') res: Response) {
-		return { message: 'Github Authorization' }
-	}
+	// //@UseGuards(GithubGuard)
+	// @Mutation(() => AuthResponse)
+	// githubLogin(@Context('req') req: Request, @Context('res') res: Response) {
+	// 	return { message: 'Github Authorization' }
+	// }
 
-	@Mutation(() => AuthResponse)
-	googleRedirect(@Context('req') req: Request, @Context('res') res: Response) {
-		return this.authService.socialRedirect(req, res)
-	}
+	// @Query(() => AuthResponse)
+	// googleRedirect(@Context('req') req: Request, @Context('res') res: Response) {
+	// 	return this.authService.socialRedirect(req, res)
+	// }
 
-	@Mutation(() => AuthResponse)
-	githubRedirect(@Context('req') req: Request, @Context('res') res: Response) {
-		return this.authService.socialRedirect(req, res)
-	}
+	// @Mutation(() => AuthResponse)
+	// githubRedirect(@Context('req') req: Request, @Context('res') res: Response) {
+	// 	return this.authService.socialRedirect(req, res)
+	// }
 
 	// @Query(() => [Auth], { name: 'auth' })
 	// findAll() {

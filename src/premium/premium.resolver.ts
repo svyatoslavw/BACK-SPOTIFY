@@ -1,34 +1,32 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { Auth } from 'src/auth/decorators/auth.decorator'
-import { Playlist } from './entities/playlist.entity'
-import { PlaylistService } from './playlist.service'
+import { PlaylistService } from 'src/playlist/playlist.service'
+import { Premium } from './entities/premium.entity'
 
-@Resolver(() => Playlist)
+@Resolver(() => Premium)
 export class PlaylistResolver {
 	constructor(private readonly playlistService: PlaylistService) {}
 
-	@Query(() => [Playlist], { name: 'getAllPlaylist' })
+	@Query(() => [Premium], { name: 'getAllPremium' })
 	findAllPlaylists() {
 		return this.playlistService.getAll()
 	}
 
-	@Query(() => Playlist, { name: 'getPlaylistById' })
+	@Query(() => Premium, { name: 'getPlaylistById' })
 	findPlaylistById(@Args('id') id: string) {
 		return this.playlistService.byId(+id)
 	}
 
-	@Query(() => Playlist, { name: 'getPlaylistBySlug' })
+	@Query(() => Premium, { name: 'getPlaylistBySlug' })
 	findPlaylistBySlug(@Args('slug') slug: string) {
 		return this.playlistService.bySlug(slug)
 	}
 
-	@Auth()
-	@Mutation(() => Playlist, { name: 'createPlaylist' })
+	@Mutation(() => Premium, { name: 'createPlaylist' })
 	createPlaylist(@Args('id') userId: number) {
 		return this.playlistService.create(userId)
 	}
 
-	@Mutation(() => Playlist, { name: 'deletePlaylist' })
+	@Mutation(() => Premium, { name: 'deletePlaylist' })
 	deletePlaylist(
 		@Args('id') userId: string,
 		@Args('playlistId') playlistId: string

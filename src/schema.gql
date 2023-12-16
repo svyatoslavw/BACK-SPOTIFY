@@ -8,9 +8,37 @@ type Playlist {
   slug: String!
   name: String!
   image: String!
-  tracks: [Track!]!
+  tracks: [Track!]
+  userId: Float!
+  user: User
+}
+
+type Favorite {
+  id: Int!
+  createdAt: String!
+  userId: Int!
+  playlistId: Int!
+  user: User!
+  playlist: Playlist!
+}
+
+type Premium {
+  id: Int!
+  createdAt: String!
+  expiration: String
+  price: String!
+  type: EnumUserPremium!
+  image: String!
   userId: Float!
   user: User!
+}
+
+enum EnumUserPremium {
+  NONEPREMIUM
+  INDIVIDUAL
+  STUDENT
+  DUO
+  FAMILY
 }
 
 type User {
@@ -20,10 +48,11 @@ type User {
   password: String!
   name: String!
   image: String!
-  country: String!
+  country: String
   login: String!
-  favorites: [Playlist!]
+  favorites: [Favorite!]
   role: UserRole!
+  premium: Premium
 }
 
 enum UserRole {
@@ -75,6 +104,11 @@ type AuthResponse {
   refreshToken: String!
 }
 
+type SearchResult {
+  tracks: [Track!]!
+  albums: [Album!]!
+}
+
 type StatisticsResponse {
   name: String!
   value: Float!
@@ -83,16 +117,22 @@ type StatisticsResponse {
 type Query {
   getAllUsers: [User!]!
   getProfile(id: Float!): User!
-  getAllTracks: [Track!]!
+  getAllTracks(query: SearchInput!): [Track!]!
   getHomeTracks: [Track!]!
-  getTrackById(id: String!): Track!
+  getTrackById(id: Float!): Track!
   getAllAlbum: [Album!]!
   getAllPlaylist: [Playlist!]!
   getPlaylistById(id: String!): Playlist!
   getPlaylistBySlug(slug: String!): Playlist!
+  getSearchQuery(query: SearchInput!): SearchResult!
   getMainStatistics: [StatisticsResponse!]!
   getAllCategory: [Category!]!
   getCategoryById(id: Int!): Category!
+}
+
+input SearchInput {
+  searchTerm: String
+  categoryId: String
 }
 
 type Mutation {
@@ -102,10 +142,6 @@ type Mutation {
   register(registerInput: AuthDto!): AuthResponse!
   login(loginInput: AuthDto!): AuthResponse!
   getTokens(authInput: TokensDto!): AuthResponse!
-  googleLogin: AuthResponse!
-  githubLogin: AuthResponse!
-  googleRedirect: AuthResponse!
-  githubRedirect: AuthResponse!
   createPlaylist(id: Float!): Playlist!
   deletePlaylist(id: String!, playlistId: String!): Playlist!
   createCategory(createCategoryInput: CreateCategoryInput!): Category!

@@ -1,4 +1,5 @@
 import { Args, Query, Resolver } from '@nestjs/graphql'
+import { SearchInput } from 'src/search/search.input'
 import { Track } from './entities/track.entity'
 import { TrackService } from './track.service'
 
@@ -7,7 +8,7 @@ export class TrackResolver {
 	constructor(private readonly trackService: TrackService) {}
 
 	@Query(() => [Track], { name: 'getAllTracks' })
-	tracks() {
+	tracks(@Args('query') query: SearchInput) {
 		return this.trackService.getAll()
 	}
 
@@ -17,7 +18,7 @@ export class TrackResolver {
 	}
 
 	@Query(() => Track, { name: 'getTrackById' })
-	trackById(@Args('id') id: string) {
-		return this.trackService.byId(+id)
+	getTrackById(@Args('id') id: number) {
+		return this.trackService.byId(id)
 	}
 }

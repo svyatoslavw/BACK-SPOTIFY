@@ -1,4 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Auth } from 'src/auth/decorators/auth.decorator'
 import { UserDto } from './dto/user.dto'
 import { User } from './entities/user.entity'
 import { UserService } from './user.service'
@@ -13,6 +14,7 @@ export class UserResolver {
 	}
 
 	@Query(() => User, { name: 'getProfile' })
+	@Auth()
 	profile(@Args('id') id: number) {
 		return this.userService.byId(id)
 	}

@@ -10,7 +10,7 @@ export class Playlist {
 	@Field(() => String)
 	createdAt: string
 
-	@Field(() => String)
+	@Field(() => String!)
 	slug: string
 
 	@Field(() => String)
@@ -19,12 +19,12 @@ export class Playlist {
 	@Field(() => String)
 	image: string
 
-	@Field(() => [Track])
+	@Field(() => [Track], { nullable: true })
 	tracks: Track[]
 
 	@Field(() => Number)
-	userId: true
+	userId: number
 
-	@Field(() => User)
+	@Field(() => User, { nullable: true })
 	user: User
 }

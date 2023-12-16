@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql'
 import { UserRole } from '@prisma/client'
-import { Playlist } from 'src/playlist/entities/playlist.entity'
+import { Favorite } from 'src/playlist/entities/favorites.entity'
+import { Premium } from 'src/premium/entities/premium.entity'
 
 registerEnumType(UserRole, { name: 'UserRole' })
 
@@ -24,15 +25,18 @@ export class User {
 	@Field(() => String)
 	image: string
 
-	@Field(() => String)
+	@Field(() => String, { nullable: true })
 	country: string
 
 	@Field(() => String)
 	login: string
 
-	@Field(() => [Playlist], { nullable: true })
-	favorites?: Playlist[]
+	@Field(() => [Favorite], { nullable: true })
+	favorites?: Favorite[]
 
 	@Field(() => UserRole)
 	role: UserRole
+
+	@Field(() => Premium, { nullable: true })
+	premium: Premium
 }
