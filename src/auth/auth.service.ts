@@ -2,18 +2,15 @@ import {
 	BadRequestException,
 	Injectable,
 	NotFoundException,
-	Req,
-	Res,
 	UnauthorizedException
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { User } from '@prisma/client'
 import { hash, verify } from 'argon2'
-import { Request, Response } from 'express'
 import { PrismaService } from 'src/prisma.service'
 import { UserService } from 'src/user/user.service'
 import { generateRandomLogin } from 'src/utils/random-login'
-import { AuthDto, AuthGoogleDto } from './dto/auth.dto'
+import { AuthDto } from './dto/auth.dto'
 
 @Injectable()
 export class AuthService {
@@ -35,6 +32,7 @@ export class AuthService {
 		if (!result) throw new UnauthorizedException('Invalid refresh token')
 
 		const user = await this.userService.byId(result.id)
+		if (!user) throw new NotFoundException('User not found ')
 
 		const tokens = await this.issueTokens(user.id)
 
@@ -47,7 +45,7 @@ export class AuthService {
 				email: dto.email
 			}
 		})
-		if (oldUser) throw new BadRequestException('Пользователь уже существует')
+		if (oldUser) throw new BadRequestException('User already exists')
 
 		const user = await this.prisma.user.create({
 			data: {
@@ -64,29 +62,6 @@ export class AuthService {
 		return {
 			user: this.returnUserFields(user),
 			...tokens
-		}
-	}
-
-	async authGoogle(dto: AuthGoogleDto) {
-		const oldUser = await this.prisma.user.findUnique({
-			where: { email: dto.email }
-		})
-
-		if (oldUser) {
-			return oldUser
-		}
-		const user = await this.prisma.user.create({
-			data: {
-				email: dto.email,
-				name: dto.name,
-				password: '',
-				country: 'Unknown',
-				login: generateRandomLogin(24)
-			}
-		})
-
-		return {
-			user: this.returnUserFields(user)
 		}
 	}
 
@@ -111,7 +86,6 @@ export class AuthService {
 			name: user.name,
 			role: user.role,
 			image: user.image
-			//isPremium: user.isPremium
 		}
 	}
 
@@ -121,27 +95,12 @@ export class AuthService {
 				email: dto.email
 			}
 		})
-		if (!user) throw new NotFoundException('Пользователь не найден!')
+		if (!user) throw new NotFoundException('User not found!')
 
 		const isValid = await verify(user.password, dto.password)
 
 		if (!isValid) throw new UnauthorizedException('Invalid password')
 
 		return user
-	}
-
-	async socialRedirect(@Req() req: Request, @Res() res: Response) {
-		const user = req.user
-		const accessToken = this.jwtServise.sign(user, {
-			expiresIn: '1d'
-		})
-
-		const refreshToken = this.jwtServise.sign(user, {
-			expiresIn: '7d'
-		})
-		res.cookie('accessToken', accessToken)
-		res.cookie('refreshToken', refreshToken)
-
-		res.redirect('http://localhost:3000')
 	}
 }

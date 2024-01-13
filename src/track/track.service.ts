@@ -4,12 +4,16 @@ import { AlbumService } from 'src/album/album.service'
 import { PrismaService } from 'src/prisma.service'
 import { SearchDto } from 'src/search/dto/search.dto'
 import { returnTrackObject } from './track.object'
+import { UserService } from '../user/user.service'
+import { TrackDto } from './dto/track.dto'
+import { generateSlug } from '../utils/generate-slug'
 
 @Injectable()
 export class TrackService {
 	constructor(
 		private prisma: PrismaService,
-		private albumService: AlbumService
+		private albumService: AlbumService,
+		private userService: UserService
 	) {}
 
 	async getAll(dto: SearchDto = {}) {
@@ -82,5 +86,35 @@ export class TrackService {
 		if (!track) throw new NotFoundException('Track not found')
 
 		return track
+	}
+
+	async bySlug(slug: string) {
+		const track = await this.prisma.track.findUnique({
+			where: {
+				slug
+			},
+			select: returnTrackObject
+		})
+		if (!track) throw new NotFoundException('Track not found')
+
+		return track
+	}
+
+	async create(id: number, dto: TrackDto) {
+		const user = await this.userService.byId(id)
+		return this.prisma.track.create({
+			data: {
+				name: dto.name,
+				slug: generateSlug(dto.name),
+				image: dto.image,
+				file: dto.file,
+				releaseDate: new Date(),
+				artist: {
+					connect: {
+						id: user.id
+					}
+				}
+			}
+		})
 	}
 }

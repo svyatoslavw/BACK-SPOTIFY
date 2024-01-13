@@ -1,4 +1,4 @@
-enum UserPremium {
+export enum UserPremium {
 	NONEPREMIUM = 'NONEPREMIUM',
 	INDIVIDUAL = 'INDIVIDUAL',
 	STUDENT = 'STUDENT',

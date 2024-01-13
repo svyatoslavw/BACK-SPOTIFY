@@ -1,36 +1,19 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { PlaylistService } from 'src/playlist/playlist.service'
+import { Args, Mutation, registerEnumType, Resolver } from '@nestjs/graphql'
 import { Premium } from './entities/premium.entity'
+import { PremiumService } from './premium.service'
+import { PremiumResponse } from './dto/premium.response'
+import { UserPremium } from '../enum/premium.enum'
 
-@Resolver(() => Premium)
-export class PlaylistResolver {
-	constructor(private readonly playlistService: PlaylistService) {}
 
-	@Query(() => [Premium], { name: 'getAllPremium' })
-	findAllPlaylists() {
-		return this.playlistService.getAll()
-	}
+@Resolver()
+export class PremiumResolver {
+	constructor(private readonly premiumService: PremiumService) {}
 
-	@Query(() => Premium, { name: 'getPlaylistById' })
-	findPlaylistById(@Args('id') id: string) {
-		return this.playlistService.byId(+id)
-	}
-
-	@Query(() => Premium, { name: 'getPlaylistBySlug' })
-	findPlaylistBySlug(@Args('slug') slug: string) {
-		return this.playlistService.bySlug(slug)
-	}
-
-	@Mutation(() => Premium, { name: 'createPlaylist' })
-	createPlaylist(@Args('id') userId: number) {
-		return this.playlistService.create(userId)
-	}
-
-	@Mutation(() => Premium, { name: 'deletePlaylist' })
-	deletePlaylist(
-		@Args('id') userId: string,
-		@Args('playlistId') playlistId: string
+	@Mutation(() => PremiumResponse, { name: 'createPayment' })
+	createPayment(
+		@Args('type') type: UserPremium,
+		@Args('id') id: number,
 	) {
-		return this.playlistService.delete(+userId, +playlistId)
+		return this.premiumService.create(type,id)
 	}
 }

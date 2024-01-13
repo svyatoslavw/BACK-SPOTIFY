@@ -18,15 +18,16 @@ model User {
   name     String @unique
   image    String @default("/uploads/default_avatar.png")
 
-  login     String     @unique
-  gender    String?
-  country   String
-  //isPremium Boolean @default(false)
-  role      UserRole   @default(USER)
-  tracks    Track[]
-  albums    Album[]
-  favorites Favorite[]
-  playlist  Playlist[]
+  login       String     @unique
+  gender      String?
+  country     String
+  // isPremium Boolean @default(false)
+  role        UserRole   @default(USER)
+  likedTracks Track[]    @relation(name: "likedTracks")
+  tracks      Track[]
+  albums      Album[]
+  favorites   Favorite[]
+  playlist    Playlist[]
 
   premiumId Int?
   premium   Premium? @relation(fields: [premiumId], references: [id])
@@ -50,6 +51,7 @@ model Track {
 
   releaseDate DateTime
   name        String
+  slug        String   @unique
   image       String
   file        String
 
@@ -63,6 +65,7 @@ model Track {
 
   category   Category? @relation(fields: [categoryId], references: [id])
   categoryId Int?      @map("category_id")
+  users      User[]    @relation(name: "likedTracks")
 }
 
 model Album {
@@ -155,6 +158,6 @@ enum UserRole {
   USER
   ADMIN
   MODERATOR
-  SUPPORT
+  ARTIST
   DEVELOPER
 }

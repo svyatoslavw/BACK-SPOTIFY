@@ -21,6 +21,9 @@ export class Track {
 	name: string
 
 	@Field(() => String)
+	slug: string
+
+	@Field(() => String)
 	image: string
 
 	@Field(() => Int)

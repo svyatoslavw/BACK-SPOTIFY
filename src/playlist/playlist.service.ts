@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma.service'
 import { UserService } from 'src/user/user.service'
 import { generateSlug } from 'src/utils/generate-slug'
 import { generateRandomNumber } from 'src/utils/random-number'
+import { UpdatePlaylistDto } from './entities/update-playlist.dto'
 import { returnPlaylistObject } from './playlist.object'
 
 @Injectable()
@@ -42,6 +43,25 @@ export class PlaylistService {
 		return playlist
 	}
 
+	async addToPlaylist(id: number, trackId: number) {
+		const playlist = await this.prisma.playlist.update({
+			where: {
+				id
+			},
+			data: {
+				tracks: {
+					connect: {
+						id: trackId
+					}
+				}
+			}
+		})
+		if (!playlist) {
+			throw new NotFoundException('Added track failed')
+		}
+		return playlist
+	}
+
 	async create(userId: number) {
 		const user = await this.userService.byId(userId)
 
@@ -75,8 +95,20 @@ export class PlaylistService {
 		return playlist
 	}
 
-	async delete(userId: number, playlistId: number) {
-		const user = await this.userService.byId(userId)
+	async update(id: number, dto: UpdatePlaylistDto) {
+		await this.prisma.playlist.update({
+			where: {
+				id
+			},
+			data: {
+				name: dto.name,
+				slug: generateSlug(dto.name),
+				image: dto.image
+			}
+		})
+	}
+	async delete(id: number, playlistId: number) {
+		const user = await this.userService.byId(id)
 		const playlist = await this.byId(playlistId)
 
 		const favoritePlaylist = await this.prisma.favorite.deleteMany({
@@ -104,6 +136,6 @@ export class PlaylistService {
 			throw new NotFoundException('Failed to delete playlist')
 		}
 
-		return { favoritePlaylist, removedPlaylist }
+		return 'Completed'
 	}
 }

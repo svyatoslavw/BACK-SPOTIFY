@@ -28,16 +28,3 @@ export class AuthDto {
 	@IsString()
 	password: string
 }
-
-@InputType()
-export class AuthGoogleDto {
-	@Field(() => String)
-	@IsNotEmpty({ message: 'email is required' })
-	@IsEmail()
-	email: string
-
-	@Field(() => String)
-	@IsNotEmpty({ message: 'name is required' })
-	@IsString()
-	name: string
-}

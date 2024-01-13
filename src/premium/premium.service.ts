@@ -1,13 +1,19 @@
+// -------------------------
+// FIX ME! CREATED WITHOUT PAYMENT!
+// -------------------------
+
 import { Injectable, Res } from '@nestjs/common'
 import { Response } from 'express'
 import { PrismaService } from 'src/prisma.service'
 import Stripe from 'stripe'
+import { EnumUserPremium } from '@prisma/client'
+import { UserPremium } from '../enum/premium.enum'
 
 @Injectable()
 export class PremiumService {
 	constructor(private prisma: PrismaService) {}
 
-	async create(type: UserPremiumType, userId: number) {
+	async create(type: UserPremium, userId: number) {
 		const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 			apiVersion: '2023-10-16',
 			appInfo: {
@@ -16,7 +22,7 @@ export class PremiumService {
 			}
 		})
 
-		let session: any
+		let session: Stripe.Checkout.Session
 		let price: number
 
 		switch (type) {
@@ -31,8 +37,8 @@ export class PremiumService {
 					],
 					mode: 'subscription',
 					customer: 'cus_P49FTV4LMX5Z4z',
-					success_url: `http://localhost:4000/premium/success/session?success=true`,
-					cancel_url: `http://localhost:4000/premium/success/session?canceled=true`,
+					success_url: `http://localhost:3000/session?success=true`,
+					cancel_url: `http://localhost:3000/session?canceled=true`,
 					subscription_data: {
 						trial_period_days: 30
 					}
@@ -50,8 +56,8 @@ export class PremiumService {
 					],
 					mode: 'subscription',
 					customer: 'cus_P49FTV4LMX5Z4z',
-					success_url: `http://localhost:4000/premium/success/session?success=true`,
-					cancel_url: `http://localhost:4000/premium/success/session?canceled=true`,
+					success_url: `http://localhost:3000/session?success=true`,
+					cancel_url: `http://localhost:3000/session?canceled=true`,
 					subscription_data: {
 						trial_period_days: 30
 					}
@@ -69,8 +75,8 @@ export class PremiumService {
 					],
 					mode: 'subscription',
 					customer: 'cus_P49FTV4LMX5Z4z',
-					success_url: `http://localhost:4000/premium/success/session?success=true`,
-					cancel_url: `http://localhost:4000/premium/success/session?canceled=true`,
+					success_url: `http://localhost:3000/session?success=true`,
+					cancel_url: `http://localhost:3000/session?canceled=true`,
 					subscription_data: {
 						trial_period_days: 30
 					}
@@ -87,11 +93,12 @@ export class PremiumService {
 					],
 					mode: 'subscription',
 					customer: 'cus_P49FTV4LMX5Z4z',
-					success_url: `http://localhost:4000/premium/success/session?success=true`,
-					cancel_url: `http://localhost:4000/premium/success/session?canceled=true`,
+					success_url: `http://localhost:3000/session?success=true`,
+					cancel_url: `http://localhost:3000/session?canceled=true`,
 					subscription_data: {
 						trial_period_days: 30
-					}
+					},
+
 				})
 				break
 
@@ -126,11 +133,6 @@ export class PremiumService {
 				}
 			}
 		})
-
-		return session
-	}
-
-	async successSession(@Res() session: Response) {
-		session.redirect(process.env.APP_URL)
+		return { url: session.url }
 	}
 }

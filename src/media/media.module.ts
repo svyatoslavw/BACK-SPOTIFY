@@ -1,9 +1,11 @@
-import { Module } from '@nestjs/common';
-import { MediaService } from './media.service';
-import { MediaController } from './media.controller';
+import { Module } from '@nestjs/common'
+import { PrismaService } from 'src/prisma.service'
+import { UserService } from 'src/user/user.service'
+import { MediaResolver } from './media.resolver'
+import { MediaService } from './media.service'
+import { JwtService } from '@nestjs/jwt'
 
 @Module({
-  controllers: [MediaController],
-  providers: [MediaService]
+	providers: [MediaService, MediaResolver, PrismaService, UserService, JwtService]
 })
 export class MediaModule {}

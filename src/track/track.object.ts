@@ -5,6 +5,7 @@ export const returnTrackObject: Prisma.TrackSelect = {
 	createdAt: true,
 	releaseDate: true,
 	file: true,
+	slug: true,
 	name: true,
 	image: true,
 	artistId: true,
@@ -12,7 +13,7 @@ export const returnTrackObject: Prisma.TrackSelect = {
 		select: {
 			id: true,
 			image: true,
-			name: true
+			name: true,
 		}
 	},
 	album: true,

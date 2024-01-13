@@ -8,9 +8,6 @@ import { UserModule } from 'src/user/user.module'
 import { UserService } from 'src/user/user.service'
 import { AuthResolver } from './auth.resolver'
 import { AuthService } from './auth.service'
-import { SessionSerializer } from './serializers/session.serialize'
-import { GithubStrategy } from './strategy/github.strategy'
-import { GoogleStrategy } from './strategy/google.strategy'
 import { JwtStrategy } from './strategy/jwt.strategy'
 
 @Module({
@@ -29,10 +26,7 @@ import { JwtStrategy } from './strategy/jwt.strategy'
 		AuthResolver,
 		UserService,
 		PrismaService,
-		JwtStrategy,
-		GoogleStrategy,
-		GithubStrategy,
-		SessionSerializer
+		JwtStrategy
 	]
 })
 export class AuthModule {}

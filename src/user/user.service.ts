@@ -3,15 +3,20 @@ import {
 	Injectable,
 	NotFoundException
 } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
 import { Prisma } from '@prisma/client'
-import { hash } from 'bcrypt'
+import { hash } from 'argon2'
 import { returnPlaylistObject } from 'src/playlist/playlist.object'
 import { PrismaService } from 'src/prisma.service'
+import { returnTrackObject } from '../track/track.object'
 import { UserDto } from './dto/user.dto'
 
 @Injectable()
 export class UserService {
-	constructor(private prisma: PrismaService) {}
+	constructor(
+		private prisma: PrismaService,
+		private jwtService: JwtService
+	) {}
 
 	async getAll() {
 		return this.prisma.user.findMany()
@@ -35,6 +40,9 @@ export class UserService {
 				role: true,
 				premium: true,
 				tracks: true,
+				likedTracks: {
+					select: returnTrackObject
+				},
 				playlist: {
 					select: returnPlaylistObject
 				},
@@ -61,7 +69,7 @@ export class UserService {
 	}
 
 	async findByEmail(email: string) {
-		return await this.prisma.user.findUnique({
+		return this.prisma.user.findUnique({
 			where: {
 				email
 			}
@@ -88,11 +96,21 @@ export class UserService {
 				email: dto.email,
 				name: dto.name,
 				image: dto.image,
-				password: dto.password ? await hash(dto.password, 10) : user.password
+				password: dto.password ? await hash(dto.password) : user.password
 			}
 		})
 	}
 
+	async updateImage(id: number, dto: UserDto) {
+		return this.prisma.user.update({
+			where: {
+				id
+			},
+			data: {
+				image: dto.image
+			}
+		})
+	}
 	async toggleFavorite(userId: number, playlistId: number) {
 		const user = await this.prisma.user.findUnique({
 			where: { id: userId },
@@ -139,7 +157,51 @@ export class UserService {
 		return 'Success'
 	}
 
+	async toggleFavoriteTrack(userId: number, trackId: number) {
+		const user = await this.byId(userId)
+
+		if (!user) throw new NotFoundException('Пользователь не найден')
+
+		const isExists = user.likedTracks.some(track => track.id === trackId)
+
+		await this.prisma.user.update({
+			where: {
+				id: user.id
+			},
+			data: {
+				likedTracks: {
+					[isExists ? 'disconnect' : 'connect']: {
+						id: trackId
+					}
+				}
+			}
+		})
+		return 'Success'
+	}
+	async getProfileByToken(token: string) {
+		try {
+			const payload: any = await this.jwtService.verifyAsync(token, {
+				secret: process.env.JWT_SECRET
+			})
+			const userId = +payload.id
+			if (!userId) {
+				throw new Error('Invalid user id')
+			}
+
+			return this.prisma.user.findUnique({
+				where: {
+					id: +userId
+				}
+			})
+		} catch (error) {
+			throw new Error('Invalid token')
+		}
+	}
 	remove(id: number) {
-		return `This action removes a #${id} user`
+		return this.prisma.user.delete({
+			where: {
+				id
+			}
+		})
 	}
 }

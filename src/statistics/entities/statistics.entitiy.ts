@@ -2,9 +2,9 @@ import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
 export class StatisticsResponse {
-	@Field(() => String)
+	@Field(() => String, {nullable: true})
 	name: string
 
-	@Field(() => Number)
+	@Field(() => Number, {nullable: true})
 	value: number
 }

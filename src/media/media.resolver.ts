@@ -1,6 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js'
-import { MediaResponse } from './media.interface'
+import { MediaResponse } from './entities/media.entity'
 import { MediaService } from './media.service'
 @Resolver()
 export class MediaResolver {
@@ -8,11 +8,10 @@ export class MediaResolver {
 
 	@Mutation(() => MediaResponse)
 	async uploadMediaFile(
-		@Args('id') id: number,
 		@Args('file', { type: () => GraphQLUpload, nullable: true })
 		file: GraphQLUpload.FileUpload
 	) {
 		console.log(file)
-		return this.mediaService.saveMediaFiles(id, file)
+		return this.mediaService.saveMediaFiles(file)
 	}
 }

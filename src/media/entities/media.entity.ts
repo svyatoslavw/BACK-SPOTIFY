@@ -2,9 +2,8 @@ import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
 export class MediaResponse {
-	@Field()
+	@Field(() => String)
 	url: string
-
-	@Field()
+	@Field(() => String)
 	name: string
 }

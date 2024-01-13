@@ -1,14 +1,16 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { Module } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
+import { ConfigModule, ConfigService } from '@nestjs/config'
 import { GraphQLModule } from '@nestjs/graphql'
-import { PassportModule } from '@nestjs/passport'
+import { JwtModule } from '@nestjs/jwt'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { path } from 'app-root-path'
 import { join } from 'path'
 import { AlbumModule } from './album/album.module'
 import { AuthModule } from './auth/auth.module'
+import { JwtStrategy } from './auth/strategy/jwt.strategy'
 import { CategoryModule } from './category/category.module'
+import { getJwtConfig } from './config/jwt.config'
 import { MediaModule } from './media/media.module'
 import { PlaylistModule } from './playlist/playlist.module'
 import { PremiumModule } from './premium/premium.module'
@@ -31,20 +33,10 @@ import { UserModule } from './user/user.module'
 			driver: ApolloDriver,
 			autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
 			playground: true,
-			context: ({ req }) => ({ req })
+			context: ({ req, res }) => ({ req, res })
 		}),
-		// GraphQLModule.forRootAsync({
-		// 	useFactory: async () => ({
-		// 		driver: ApolloDriver,
-		// 		autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-		// 		playground: true,
-		// 		context: ({ req }) => ({ req }),
-		// 		guards: [JwtGuard, RolesGuard, RefreshJwtGuard]
-		// 	})
-		// }),
 		UserModule,
 		AuthModule,
-		PassportModule.register({ session: true }),
 		TrackModule,
 		AlbumModule,
 		PlaylistModule,
@@ -52,9 +44,14 @@ import { UserModule } from './user/user.module'
 		SearchModule,
 		StatisticsModule,
 		PremiumModule,
-		CategoryModule
+		CategoryModule,
+		JwtModule.registerAsync({
+			imports: [ConfigModule],
+			inject: [ConfigService],
+			useFactory: getJwtConfig
+		})
 	],
 	controllers: [],
-	providers: [PrismaService]
+	providers: [PrismaService, JwtStrategy]
 })
 export class AppModule {}

@@ -8,36 +8,16 @@ import {
 } from 'class-validator'
 
 @InputType()
-export class AuthDto {
+export class TrackDto {
 	@Field(() => String)
-	@IsNotEmpty({ message: 'email is required' })
-	@IsEmail()
-	email: string
-
-	@Field(() => String, { nullable: true })
-	@IsOptional()
-	@IsNotEmpty({ message: 'name is required' })
-	@IsString()
+	@IsNotEmpty({message: 'name is required'})
 	name: string
 
 	@Field(() => String)
-	@MinLength(5, {
-		message: 'Password nust be at loast 6 characters'
-	})
-	@IsNotEmpty({ message: 'password is required' })
-	@IsString()
-	password: string
-}
-
-@InputType()
-export class AuthGoogleDto {
-	@Field(() => String)
-	@IsNotEmpty({ message: 'email is required' })
-	@IsEmail()
-	email: string
+	@IsNotEmpty({message: 'image is required'})
+	image: string
 
 	@Field(() => String)
-	@IsNotEmpty({ message: 'name is required' })
-	@IsString()
-	name: string
+	@IsNotEmpty({message: 'file is required'})
+	file: string
 }

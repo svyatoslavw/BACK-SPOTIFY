@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { PrismaClient, Track } from '@prisma/client'
 import * as dotenv from 'dotenv'
+import { generateSlug } from '../../src/utils/generate-slug'
 
 dotenv.config()
 const prisma = new PrismaClient()
@@ -26,11 +27,13 @@ const createTracks = async (quantity: number) => {
 	for (let i = 0; i < quantity; i++) {
 		const trackName = faker.music.songName()
 		const trackDate = faker.date.future()
+		const randomImageNumber = faker.number.int({ min: 1, max: 9 });
 
 		const track = await prisma.track.create({
 			data: {
 				name: trackName,
-				image: '/uploads/9.jpg',
+				slug: generateSlug(trackName),
+				image: `/uploads/${randomImageNumber}.jpg`,
 				file: '/uploads/test.mp3',
 				releaseDate: trackDate,
 				artist: {

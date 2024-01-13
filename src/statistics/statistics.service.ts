@@ -43,7 +43,7 @@ export class StatisticsService {
 				value: premiumCount
 			},
 			{
-				name: 'Total amount',
+				name: 'Orders',
 				value: totalAmount._sum.price
 			}
 		]

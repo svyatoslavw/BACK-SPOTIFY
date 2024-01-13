@@ -1,6 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { Auth } from 'src/auth/decorators/auth.decorator'
 import { Playlist } from './entities/playlist.entity'
+import { UpdatePlaylistDto } from './entities/update-playlist.dto'
 import { PlaylistService } from './playlist.service'
 
 @Resolver(() => Playlist)
@@ -22,17 +23,25 @@ export class PlaylistResolver {
 		return this.playlistService.bySlug(slug)
 	}
 
+	@Mutation(() => Playlist)
+	addToPlaylist(@Args('id') id: number, @Args('trackId') trackId: number) {
+		return this.playlistService.addToPlaylist(id, trackId)
+	}
+
 	@Auth()
 	@Mutation(() => Playlist, { name: 'createPlaylist' })
 	createPlaylist(@Args('id') userId: number) {
 		return this.playlistService.create(userId)
 	}
-
-	@Mutation(() => Playlist, { name: 'deletePlaylist' })
+	@Mutation(() => Playlist, { name: 'updatePlaylist', nullable: true })
+	updatePlaylist(@Args('id') id: number, @Args('dto') dto: UpdatePlaylistDto) {
+		return this.playlistService.update(id, dto)
+	}
+	@Mutation(() => String, { name: 'deletePlaylist', nullable: true })
 	deletePlaylist(
-		@Args('id') userId: string,
-		@Args('playlistId') playlistId: string
+		@Args('id') id: number,
+		@Args('playlistId') playlistId: number
 	) {
-		return this.playlistService.delete(+userId, +playlistId)
+		return this.playlistService.delete(id, playlistId)
 	}
 }
