@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import * as cors from 'cors'
+import * as session from 'express-session'
 import * as graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js'
 import * as passport from 'passport'
 import { AppModule } from './app.module'
@@ -27,6 +28,18 @@ async function bootstrap() {
 				'Accept'
 			],
 			credentials: true
+		})
+	)
+
+	app.use(
+		session({
+			name: 'session.id',
+			secret: process.env.SESSION_SECRET,
+			saveUninitialized: false,
+			resave: false,
+			cookie: {
+				maxAge: 60000
+			}
 		})
 	)
 

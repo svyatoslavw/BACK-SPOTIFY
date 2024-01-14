@@ -1,73 +1,147 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+<div align="center">
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+  <img src="https://www.svgrepo.com/show/355256/spotify.svg" alt="logo" width="100" height="100" />
+  
+  <h1>Spotify Clone with NestJS</h1>
+  
+  <p>
+  (Apollo, GraphQL, NestJS)
+  </p>
+  
+<h4>
+    <a href="https://github.com/svyatoslavw/FRONT-SPOTIFY/blob/master/README.md">Documentation</a>
+  <span> · </span>
+    <a href="https://github.com/svyatoslavw/FRONT-SPOTIFY/issues">Report Bugs</a>
+  <span> · </span>
+    <a href="https://github.com/svyatoslavw/FRONT-SPOTIFY/issues">Request Feature</a>
+  </h4>
+</div>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+<br />
 
-## Description
+<!-- Table of Contents -->
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## :notebook_with_decorative_cover: Table of Contents
 
-## Installation
+- [About the Project](#star2-about-the-project)
+  - [Technologies Stack](#space_invader-tech-stack)
+- [Getting Started](#toolbox-getting-started)
+  - [Environment Variables](#key-environment-variables)
+  - [Installation](#gear-installation)
+  - [Run Locally](#running-run-locally)
 
-```bash
-$ yarn install
+<!-- About the Project -->
+
+## :star2: About the Project
+
+### :space_invader: Tech Stack
+
+<details>
+  <summary>Client</summary>
+  <ul>
+    <li><a href="https://#/">Javascript</a></li>
+    <li><a href="https://nestjs.com/">Nest.js</a></li>
+    <li><a href="https://graphql.org/">GraphQL</a></li>
+  </ul>
+</details>
+
+<details>
+<summary>Client</summary>
+  <ul>
+    <li><a href="https://github.com/svyatoslavw/FRONT-SPOTIFY">Client side for Spotify</a></li>
+  </ul>
+</details>
+<br />
+
+<table>
+    <tr>
+        <td>
+<a href="#"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-plain.svg" alt="Google" width="30" height="30" /></a>
+        </td>
+                        <td>
+<a href="#"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg" alt="" width="30" height="30" /></a>
+        </td>
+                        <td>
+<a href="#"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="" width="30" height="30" /></a>
+        </td>
+                                <td>
+<a href="#"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="" width="30" height="30" /></a>
+        </td>
+                                <td>
+<a href="#"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="" width="30" height="30" /></a>
+        </td>
+                                <td>
+<a href="#"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-plain.svg" alt="" width="30" height="30" /></a>
+        </td>
+    </tr>
+</table>
+
+## :toolbox: Getting Started
+
+<!-- Env Variables -->
+
+### :key: Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`APP_URL =`
+
+`DATABASE_URL =`
+
+`JWT_SECRET =`
+
+`REFRESH_TOKEN =`
+
+`SESSION_SECRET =`
+
+`STRIPE_PUBLISHABLE_KEY =`
+
+`STRIPE_SECRET_KEY =`
+
+### :gear: Installation
+
+Clone the project
+
+```
+git clone https://github.com/svyatoslavw/BACK-SPOTIFY.git
 ```
 
-## Running the app
-
-```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+```
+cd BACK-SPOTIFY
 ```
 
-## Test
+<!-- Run Locally -->
+
+### :running: Run Locally
+
+Install dependencies
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+  npm install
+  # or
+  yarn install
 ```
 
-## Support
+## Getting Started
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Start the server
+First, run the development server:
 
-## Stay in touch
+```bash
+  npm run start:dev
+  #or
+  yarn start:dev
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Open [SERVER_URL/graphql](SERVER_URL/graphql) with your browser to see the result.
 
-## License
+### Learn More
 
-Nest is [MIT licensed](LICENSE).
+To learn more about Nest.js, take a look at the following resources:
+
+- [NestJS Documentation](https://nestjs.com/) - learn about NestJS
+- [Learn NestJS](https://nestjs.com/) - an interactive NestJS tutorial.
+- [Apollo Documentation](https://www.apollographql.com/docs) - learn about working with GraphQL on the client side
+- [GraphQL Documentation](https://graphql.org/) - learn about GraphQL API
+
+You can check out [the NestJS GitHub repository](https://github.com/nestjs/nest) - your feedback and contributions are welcome!
